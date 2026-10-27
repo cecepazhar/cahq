@@ -21,10 +21,9 @@ export function createStage(canvas) {
   const camera = new THREE.OrthographicCamera(-10, 10, 10, -10, -50, 400);
 
   // ---------- cahaya ----------
-  scene.add(new THREE.HemisphereLight('#ffffff', '#334155', 2.8));
-  scene.add(new THREE.AmbientLight('#64748b', 2.2));
-  const sun = new THREE.DirectionalLight('#ffffff', 3.2);
-  sun.position.set(16, 48, 32);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#b8c4d8', 1.55));
+  const sun = new THREE.DirectionalLight('#fff6e8', 2.1);
+  sun.position.set(14, 46, 30);
   sun.castShadow = true;
   sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
   const sc = sun.shadow.camera;
@@ -32,10 +31,6 @@ export function createStage(canvas) {
   sun.shadow.bias = -0.0006;
   sun.shadow.normalBias = 0.03;
   scene.add(sun);
-
-  const fill = new THREE.DirectionalLight('#cbd5e1', 1.8);
-  fill.position.set(-20, 36, -20);
-  scene.add(fill);
 
   // ---------- kantor ----------
   const office = buildOffice(scene);

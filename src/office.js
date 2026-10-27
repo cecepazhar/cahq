@@ -10,28 +10,26 @@ export const PITCH_Z = 10.5;
 export const WALL_H = 3.6;
 const FLOOR_TOP = 0.1;
 
+function tint(hex, amount) {
+  const c = new THREE.Color(hex);
+  c.offsetHSL(0, 0, amount);
+  return `#${c.getHexString()}`;
+}
+
 function makeSign(text, color) {
   const canvas = document.createElement('canvas');
   canvas.width = 1024;
   canvas.height = 192;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#0b0d14';
-  ctx.fillRect(0, 0, 1024, 192);
-
-  // Border & bottom neon accent bar
-  ctx.strokeStyle = '#272732';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(2, 2, 1020, 188);
-
   ctx.fillStyle = color;
-  ctx.fillRect(0, 178, 1024, 14);
-
-  ctx.fillStyle = '#EDEDED';
-  ctx.font = '800 84px system-ui, -apple-system, sans-serif';
+  ctx.fillRect(0, 0, 1024, 192);
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.fillRect(0, 150, 1024, 42);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 92px system-ui, -apple-system, "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(text.toUpperCase(), 512, 88);
-
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 4;
@@ -46,14 +44,13 @@ function place(parent, obj, x, y, z, ry = 0) {
 }
 
 function buildShell(inner, color, title) {
-  const wall = '#2d3748';
-  const trim = '#4a5568';
-  const floor = '#1e2638';
+  const wall = tint(color, 0.36);
+  const trim = tint(color, -0.08);
+  const floor = tint(color, 0.42);
 
-  // Floor
   inner.add(box(ROOM_W, 0.2, ROOM_D, floor, 0, -FLOOR_TOP, 0));
 
-  // Back & left walls
+  // dinding belakang & kiri
   inner.add(box(ROOM_W + 0.3, WALL_H, 0.3, wall, 0, WALL_H / 2, -ROOM_D / 2 - 0.15));
   inner.add(box(0.3, WALL_H, ROOM_D + 0.3, wall, -ROOM_W / 2 - 0.15, WALL_H / 2, 0));
   inner.add(box(ROOM_W + 0.3, 0.14, 0.34, trim, 0, WALL_H + 0.07, -ROOM_D / 2 - 0.15));
@@ -61,44 +58,29 @@ function buildShell(inner, color, title) {
   inner.add(box(ROOM_W, 0.22, 0.05, trim, 0, 0.11, -ROOM_D / 2 + 0.03));
   inner.add(box(0.05, 0.22, ROOM_D, trim, -ROOM_W / 2 + 0.03, 0.11, 0));
 
-  // Neon division accent strip on back wall
-  inner.add(box(ROOM_W - 0.4, 0.10, 0.05, color, 0, 2.3, -ROOM_D / 2 + 0.02));
-
-  // Low front & right walls with doorway
+  // dinding rendah depan (ada pintu) & kanan
   const seg = ROOM_W / 2 - 1;
   inner.add(box(seg, 0.5, 0.2, wall, -(1 + seg / 2), 0.25, ROOM_D / 2 + 0.1));
   inner.add(box(seg, 0.5, 0.2, wall, 1 + seg / 2, 0.25, ROOM_D / 2 + 0.1));
   inner.add(box(0.2, 0.5, ROOM_D + 0.2, wall, ROOM_W / 2 + 0.1, 0.25, 0.1));
-  inner.add(box(2.0, 0.04, 0.9, '#2d3748', 0, 0.02, ROOM_D / 2 + 0.1));
+  inner.add(box(2.0, 0.04, 0.9, '#3b4252', 0, 0.02, ROOM_D / 2 + 0.1));
 
-  // Division sign board
+  // papan nama divisi
   inner.add(box(4.8, 1.0, 0.08, trim, 0, 3.0, -ROOM_D / 2 + 0.04));
-  place(inner, makeSign(title, color), 0, 3.0, -ROOM_D / 2 + 0.1);
+  place(inner, makeSign(title, tint(color, -0.02)), 0, 3.0, -ROOM_D / 2 + 0.1);
 
-  // Left window panes
+  // jendela di dinding kiri
   place(inner, F.windowPane(1.6, 1.3), -ROOM_W / 2 + 0.03, 2.0, -1.4, Math.PI / 2);
   place(inner, F.windowPane(1.6, 1.3), -ROOM_W / 2 + 0.03, 2.0, 1.8, Math.PI / 2);
-
-  // Ceiling Pendant Fixture
-  place(inner, F.ceilingLamp(color, 4.6), 0, 3.15, 0);
-
-  // Broad room illumination (warm light)
-  const roomLight = new THREE.PointLight('#fffbeb', 85, 22, 0.5);
-  roomLight.position.set(0, 3.1, 0);
-  inner.add(roomLight);
-
-  // Subtle division accent wash
-  const washLight = new THREE.PointLight(color, 25, 14, 0.8);
-  washLight.position.set(0, 2.8, 0);
-  inner.add(washLight);
 }
 
 function addSeat(inner, chars, agent, x, z, opts) {
   const { deskW, deskD, color, index, laptopColor } = opts;
-  place(inner, F.chair('#181c28'), x, 0, z);
-  const deskGroup = place(inner, F.desk(deskW, deskD, '#151824', '#272732'), x, 0, z + deskD / 2 + 0.35);
+  const chairColor = tint(color, -0.18);
+  place(inner, F.chair(chairColor), x, 0, z);
+  const deskGroup = place(inner, F.desk(deskW, deskD), x, 0, z + deskD / 2 + 0.35);
   place(deskGroup, F.laptop(laptopColor), 0, 0, -0.2);
-  place(deskGroup, F.mug(['#2563EB', '#38bdf8', '#10b981', '#f59e0b'][index % 4]), deskW / 2 - 0.4, 0, 0.1);
+  place(deskGroup, F.mug(['#ffffff', '#ffd68a', '#cde8ff', '#f7c6d9'][index % 4]), deskW / 2 - 0.4, 0, 0.1);
   if (agent.leader) {
     deskGroup.add(box(0.5, 0.1, 0.04, color, -deskW / 2 + 0.55, 0.96, deskD / 2 - 0.12));
   }
@@ -119,22 +101,13 @@ function buildDivisionRoom(div, scene, chars) {
   room.add(inner);
 
   buildShell(inner, div.color, div.name);
-  { const rug = F.rug(5.2, 3.2, '#1b2135'); rug.position.set(0, 0.0, 1.0); inner.add(rug); }
+  { const rug = F.rug(5.2, 3.2, tint(div.color, 0.3)); rug.position.set(0, 0.0, 1.0); inner.add(rug); }
 
   const members = agentsOf(div.id);
   const leader = members.find((m) => m.leader);
   const team = members.filter((m) => !m.leader);
-  const glowColors = {
-    proposal: '#60a5fa',
-    ads: '#fb923c',
-    social: '#f472b6',
-    qa: '#34d399',
-    dev: '#a78bfa',
-    reporting: '#22d3ee',
-    account: '#fbbf24',
-    finance: '#94a3b8',
-  };
-  const lc = glowColors[div.id] || '#60a5fa';
+  const glowColors = { proposal: '#cfe0ff', ads: '#ffd9bd', social: '#ffd0e6', qa: '#c9f2dc', dev: '#1f2a44', reporting: '#c8f3ee', account: '#fff0c4', finance: '#d9e2f2' };
+  const lc = glowColors[div.id] || '#8ec5ff';
 
   if (leader) {
     // 4 people: leader at back, 3 specialists in front
@@ -264,21 +237,21 @@ export function buildOffice(scene) {
   const chars = [];
   const rooms = new Map();
 
-  // Dark Sovereign Base Floor
+  // Lantai koridor / dasar bersih arsitektural
   const baseW = PITCH_X * 2 + ROOM_W + 5;
   const baseD = PITCH_Z * 2 + ROOM_D + 5;
-  const base = box(baseW, 0.4, baseD, '#07080d', 0, -0.3, 0);
+  const base = box(baseW, 0.4, baseD, '#d3dbe6', 0, -0.3, 0);
   base.castShadow = false;
   scene.add(base);
 
-  const edge = box(baseW + 1.2, 0.3, baseD + 1.2, '#030406', 0, -0.55, 0);
+  const edge = box(baseW + 1.2, 0.3, baseD + 1.2, '#aeb9c9', 0, -0.55, 0);
   edge.castShadow = false;
   scene.add(edge);
 
-  // Cyber corridor glow lines
+  // Jalur koridor (garis halus)
   for (let c = 0; c < 2; c += 1) {
     const x = (c - 0.5) * PITCH_X;
-    const lane = box(0.14, 0.02, baseD - 2, '#2563EB', x, -0.09, 0);
+    const lane = box(0.12, 0.02, baseD - 2, '#c2ccda', x, -0.09, 0);
     lane.castShadow = false;
     scene.add(lane);
   }
