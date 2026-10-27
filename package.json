@@ -1,0 +1,27 @@
+{
+  "name": "@cecepazhar/cahq",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CAHQ — Fathforce Sovereign Squad 3D Isometric Headquarters & Autonomous Agent Hub",
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c yellow,cyan \"node --watch server/index.js\" \"vite\"",
+    "dev:web": "vite",
+    "dev:api": "node --watch server/index.js",
+    "build": "vite build",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.0.1",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "vite": "^6.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
