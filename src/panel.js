@@ -242,6 +242,15 @@ export function createPanel({ onSelect, onClose, onStatus, onNeedCode, isDemo })
         if (matchMedia('(hover: hover)').matches) els.input.focus({ preventScroll: true });
       }, 350);
     },
+    setInput(text) {
+      els.input.value = text;
+      autosize();
+      syncSend();
+      setTimeout(() => {
+        els.input.focus();
+        els.input.setSelectionRange(text.length, text.length);
+      }, 380);
+    },
     close() {
       currentId = null;
     },

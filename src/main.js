@@ -44,9 +44,12 @@ function markChip(id) {
   for (const b of chipsEl.children) b.setAttribute('aria-pressed', String(b.dataset.id === id));
   const active = chipsEl.querySelector(`[aria-pressed="true"]`);
   active?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  const btnNoc = $('btn-noc');
+  if (btnNoc) btnNoc.setAttribute('aria-pressed', String(id === 'noc'));
 }
 
 function goTo(id) {
+  closeB2B();
   if (selectedId) closeChat(false);
   if (id === 'overview') {
     stage.focus('overview');
@@ -133,6 +136,55 @@ function closeChat(refocus) {
   }
 }
 
+// ---------- modal B2B & konsultasi ----------
+const b2bModal = $('b2b-modal');
+const btnB2B = $('btn-b2b');
+const btnB2BClose = $('b2b-close');
+const btnNoc = $('btn-noc');
+
+function openB2B() {
+  if (selectedId) closeChat(false);
+  if (b2bModal) {
+    b2bModal.hidden = false;
+    b2bModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  }
+}
+
+function closeB2B() {
+  if (b2bModal) {
+    b2bModal.hidden = true;
+    b2bModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+function consultAbdul(promptText) {
+  closeB2B();
+  selectAgent('abdul');
+  if (promptText) {
+    panel.setInput(promptText);
+  }
+}
+
+btnB2B?.addEventListener('click', openB2B);
+btnB2BClose?.addEventListener('click', closeB2B);
+b2bModal?.addEventListener('click', (e) => {
+  if (e.target === b2bModal) closeB2B();
+});
+
+btnNoc?.addEventListener('click', () => {
+  closeB2B();
+  goTo('noc');
+});
+
+document.querySelectorAll('.btn-b2b-action').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const prompt = btn.dataset.prompt || 'Halo Pak Abdul, saya ingin konsultasi kebutuhan implementasi B2B ERP Pabrik (retainer Rp10jt/bln) dan lisensi Sovereign Creem USD.';
+    consultAbdul(prompt);
+  });
+});
+
 // ---------- input scene ----------
 stage.onClick((id) => {
   if (id) selectAgent(id);
@@ -140,7 +192,13 @@ stage.onClick((id) => {
 });
 stage.onHover((id) => tags.setHovered(id));
 addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && selectedId) closeChat(true);
+  if (e.key === 'Escape') {
+    if (b2bModal && !b2bModal.hidden) {
+      closeB2B();
+      return;
+    }
+    if (selectedId) closeChat(true);
+  }
 });
 addEventListener('resize', () => requestAnimationFrame(setInset));
 mobile.addEventListener?.('change', () => requestAnimationFrame(setInset));
@@ -200,4 +258,4 @@ $('gate-form').addEventListener('submit', async (e) => {
   hide();
 })();
 
-window.__kantor = { stage, selectAgent, goTo };
+window.__kantor = { stage, selectAgent, goTo, openB2B, closeB2B, consultAbdul };

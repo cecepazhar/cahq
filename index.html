@@ -20,10 +20,146 @@
       <div><strong>Fathforce Sovereign Squad</strong><small>Autonomous AI Team · CA Ecosystem</small></div>
     </div>
     <nav id="chips" aria-label="Divisi"></nav>
+    <div class="topbar-actions">
+      <button id="btn-b2b" type="button" class="btn-topbar btn-topbar-primary" title="B2B ERP &amp; Hire Squad" aria-haspopup="dialog">
+        <span class="btn-icon">💼</span>
+        <span class="btn-text btn-text-full">Hire Squad / B2B ERP</span>
+        <span class="btn-text btn-text-short">B2B ERP</span>
+      </button>
+      <a id="btn-telegram" href="https://t.me/latifah_care_ai_bot" target="_blank" rel="noopener noreferrer" class="btn-topbar btn-topbar-tg" title="Chat Official AI Support di Telegram (@latifah_care_ai_bot)">
+        <span class="btn-icon">💬</span>
+        <span class="btn-text btn-text-full">Chat AI</span>
+        <span class="btn-text btn-text-short">Chat</span>
+      </a>
+      <button id="btn-noc" type="button" class="btn-topbar btn-topbar-noc" title="Lihat Fleet NOC 3D Command Center">
+        <span class="btn-icon">⚡</span>
+        <span class="btn-text btn-text-full">Fleet NOC</span>
+        <span class="btn-text btn-text-short">NOC</span>
+      </button>
+    </div>
   </header>
 
   <div id="banner" hidden></div>
   <div id="hint">Klik karakter untuk ngobrol &nbsp;·&nbsp; geser untuk pindah &nbsp;·&nbsp; scroll untuk zoom</div>
+
+  <!-- Modal B2B Lead Funnel & Proposal -->
+  <div id="b2b-modal" class="modal-backdrop" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="b2b-title">
+    <div class="modal-card b2b-card">
+      <div class="modal-header">
+        <div class="modal-badge">
+          <span class="badge-dot"></span>
+          <span>B2B &amp; SOVEREIGN ENTERPRISE</span>
+        </div>
+        <button id="b2b-close" class="icon-btn" type="button" title="Tutup modal" aria-label="Tutup modal">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="b2b-intro">
+        <h2 id="b2b-title">Sovereign Factory &amp; B2B Solutions</h2>
+        <p>Solusi pencegah kebocoran stok pabrik, otomasi enterprise, dan lisensi suite software berdaulat (zero-knowledge &amp; BYOK).</p>
+      </div>
+
+      <div class="b2b-grid">
+        <!-- Card 1: FathStore ERP Pabrik -->
+        <div class="offer-card offer-enterprise">
+          <div class="offer-tag tag-blue">ENTERPRISE RETAINER</div>
+          <div class="offer-head">
+            <h3>FathStore ERP Pabrik</h3>
+            <div class="offer-price">
+              <span class="price-val">Rp 10.000.000</span>
+              <span class="price-unit">/ bulan</span>
+            </div>
+            <p class="offer-desc">Solusi anti-kebocoran stok &amp; bahan baku pabrik terintegrasi. Menutup celah kecurangan inventaris dan selisih gudang.</p>
+          </div>
+          <ul class="offer-features">
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Cegah Kebocoran Stok:</strong> Pelacakan bahan masuk, SPK produksi, Bill of Materials (BOM), &amp; waste log real-time.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Multi-Gudang &amp; Barcode:</strong> Integrasi barcode &amp; QR scanner cepat berbasis stack Go Templ + HTMX.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>100% Sovereign &amp; On-Premise:</strong> Database dan server milik pabrik Anda, tanpa ketergantungan cloud pihak ketiga.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Dedicated AI Ops:</strong> Audit harian &amp; asistensi automasi oleh Fathforce Sovereign Squad.</span>
+            </li>
+          </ul>
+          <button type="button" class="offer-cta btn-b2b-action" data-prompt="Halo Pak Abdul, pabrik kami ingin konsultasi implementasi FathStore ERP (retainer Rp10jt/bln) untuk mencegah kebocoran stok dan bahan baku. Bagaimana proses audit awal dan jadwal implementasinya?">
+            Konsultasi ERP Pabrik
+          </button>
+        </div>
+
+        <!-- Card 2: Lisensi Sovereign Creem USD -->
+        <div class="offer-card offer-license">
+          <div class="offer-tag tag-cyan">SOVEREIGN APPS SUITE</div>
+          <div class="offer-head">
+            <h3>Lisensi Sovereign Creem USD</h3>
+            <div class="offer-price-stack">
+              <div class="price-row">
+                <span class="price-label">Monthly</span>
+                <span class="price-val-sm"><strong>$19</strong> / mo</span>
+              </div>
+              <div class="price-row">
+                <span class="price-label">Annual</span>
+                <span class="price-val-sm"><strong>$99</strong> / yr</span>
+              </div>
+              <div class="price-row highlight">
+                <span class="price-label">Lifetime BYOK</span>
+                <span class="price-val-sm"><strong>$149</strong> lifetime</span>
+              </div>
+            </div>
+            <p class="offer-desc">Akses penuh ekosistem desktop &amp; terminal CA (CATerm, CAShell) dengan lisensi global via checkout Creem USD.</p>
+          </div>
+          <ul class="offer-features">
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Zero-Knowledge Vault:</strong> SQLCipher terenkripsi Argon2id + AES-256-GCM. Privasi total tanpa telemetri.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>BYOK Architecture:</strong> Gunakan API key LLM sendiri (Anthropic, Gemini, Groq) langsung tanpa mark-up token.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Ed25519 Cryptographic License:</strong> Verifikasi lisensi instan offline tanpa phone-home.</span>
+            </li>
+            <li>
+              <span class="feat-check">✓</span>
+              <span><strong>Official Priority Support:</strong> Asistensi via Telegram Care AI &amp; email Founder (hi@cecepazhar.com).</span>
+            </li>
+          </ul>
+          <button type="button" class="offer-cta btn-b2b-action" data-prompt="Halo Pak Abdul, saya tertarik dengan lisensi Sovereign Apps Suite via Creem USD ($149 Lifetime BYOK / $19/mo). Mohon info aktivasi lisensi dan kapabilitas ekosistemnya.">
+            Konsultasi Lisensi Sovereign
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer Banner & Konsultasi Langsung dengan CEO -->
+      <div class="b2b-footer">
+        <div class="b2b-ceo-box">
+          <div class="ceo-avatar">AH</div>
+          <div class="ceo-info">
+            <strong>Konsultasi Langsung dengan CEO</strong>
+            <span>Abdul Hamid III · CEO Fathforce (Visi Strategis &amp; Kemitraan Enterprise)</span>
+          </div>
+        </div>
+        <div class="b2b-footer-actions">
+          <a href="https://t.me/latifah_care_ai_bot" target="_blank" rel="noopener noreferrer" class="b2b-tg-btn" title="Chat Latifah AI di Telegram">
+            <span>💬 Chat Latifah AI</span>
+          </a>
+          <button id="btn-consult-abdul" type="button" class="b2b-consult-btn btn-b2b-action" data-prompt="Halo Pak Abdul, saya ingin konsultasi langsung mengenai kemitraan B2B Fathforce (solusi FathStore ERP Pabrik retainer Rp10jt/bln dan lisensi Sovereign Creem USD). Mohon saran dan langkah implementasi terbaik untuk bisnis kami.">
+            <span>💼 Konsultasi dengan CEO (Abdul)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <aside id="panel" aria-label="Chat" aria-hidden="true">
     <div class="panel-head">
