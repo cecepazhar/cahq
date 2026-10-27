@@ -8,6 +8,7 @@ import { agentById } from '../shared/roster.js';
 import { buildSystemPrompt } from './prompts.js';
 import { isLocal, streamLocal, localBase } from './local.js';
 import { delegate, wantsDelegation } from './delegate.js';
+import { wantsHermesExecution, cleanHermesPrompt, executeHermesFleet } from './hermes.js';
 
 // ---------- Konfigurasi (lihat .env.example) ----------
 const PORT = Number(process.env.PORT || 3001);
@@ -165,7 +166,16 @@ app.post('/api/chat', requireAccess, rateLimit, dailyCap, async (req, res) => {
       };
 
       const last = messages[messages.length - 1].content;
-      if (agent.leader && wantsDelegation(last)) {
+      if (wantsHermesExecution(last, req.body?.mode)) {
+        const cleanPrompt = cleanHermesPrompt(last);
+        await executeHermesFleet({
+          agentId: agent.id,
+          prompt: cleanPrompt,
+          onStatus: (t) => { if (!closed) send({ t }); },
+          onText: (t) => { if (!closed) send({ t }); },
+          signal: ac.signal,
+        });
+      } else if (agent.leader && wantsDelegation(last)) {
         await delegate({ leader: agent, messages, run, modelFor, maxTokens: MAX_TOKENS, send: (o) => { if (!closed) send(o); }, isClosed: () => closed });
       } else {
         await run({ model: modelFor(agent), system: buildSystemPrompt(agent), messages, maxTokens: MAX_TOKENS, onText: (t) => { if (!closed) send({ t }); } });
