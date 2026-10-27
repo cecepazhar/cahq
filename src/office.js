@@ -46,9 +46,9 @@ function place(parent, obj, x, y, z, ry = 0) {
 }
 
 function buildShell(inner, color, title) {
-  const wall = '#141724';
-  const trim = '#272732';
-  const floor = '#0d0f17';
+  const wall = '#2d3748';
+  const trim = '#4a5568';
+  const floor = '#1e2638';
 
   // Floor
   inner.add(box(ROOM_W, 0.2, ROOM_D, floor, 0, -FLOOR_TOP, 0));
@@ -62,14 +62,14 @@ function buildShell(inner, color, title) {
   inner.add(box(0.05, 0.22, ROOM_D, trim, -ROOM_W / 2 + 0.03, 0.11, 0));
 
   // Neon division accent strip on back wall
-  inner.add(box(ROOM_W - 0.4, 0.06, 0.03, color, 0, 2.3, -ROOM_D / 2 + 0.02));
+  inner.add(box(ROOM_W - 0.4, 0.10, 0.05, color, 0, 2.3, -ROOM_D / 2 + 0.02));
 
   // Low front & right walls with doorway
   const seg = ROOM_W / 2 - 1;
   inner.add(box(seg, 0.5, 0.2, wall, -(1 + seg / 2), 0.25, ROOM_D / 2 + 0.1));
   inner.add(box(seg, 0.5, 0.2, wall, 1 + seg / 2, 0.25, ROOM_D / 2 + 0.1));
   inner.add(box(0.2, 0.5, ROOM_D + 0.2, wall, ROOM_W / 2 + 0.1, 0.25, 0.1));
-  inner.add(box(2.0, 0.04, 0.9, '#1a1f2c', 0, 0.02, ROOM_D / 2 + 0.1));
+  inner.add(box(2.0, 0.04, 0.9, '#2d3748', 0, 0.02, ROOM_D / 2 + 0.1));
 
   // Division sign board
   inner.add(box(4.8, 1.0, 0.08, trim, 0, 3.0, -ROOM_D / 2 + 0.04));
@@ -78,6 +78,19 @@ function buildShell(inner, color, title) {
   // Left window panes
   place(inner, F.windowPane(1.6, 1.3), -ROOM_W / 2 + 0.03, 2.0, -1.4, Math.PI / 2);
   place(inner, F.windowPane(1.6, 1.3), -ROOM_W / 2 + 0.03, 2.0, 1.8, Math.PI / 2);
+
+  // Ceiling Pendant Fixture
+  place(inner, F.ceilingLamp(color, 4.6), 0, 3.15, 0);
+
+  // Broad room illumination (warm light)
+  const roomLight = new THREE.PointLight('#fffbeb', 85, 22, 0.5);
+  roomLight.position.set(0, 3.1, 0);
+  inner.add(roomLight);
+
+  // Subtle division accent wash
+  const washLight = new THREE.PointLight(color, 25, 14, 0.8);
+  washLight.position.set(0, 2.8, 0);
+  inner.add(washLight);
 }
 
 function addSeat(inner, chars, agent, x, z, opts) {
@@ -106,7 +119,7 @@ function buildDivisionRoom(div, scene, chars) {
   room.add(inner);
 
   buildShell(inner, div.color, div.name);
-  { const rug = F.rug(5.2, 3.2, '#10131d'); rug.position.set(0, 0.0, 1.0); inner.add(rug); }
+  { const rug = F.rug(5.2, 3.2, '#1b2135'); rug.position.set(0, 0.0, 1.0); inner.add(rug); }
 
   const members = agentsOf(div.id);
   const leader = members.find((m) => m.leader);

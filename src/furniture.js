@@ -416,3 +416,57 @@ export function nocBigScreen(title = "FATHFORCE SOVEREIGN FLEET", subtitle = "Ta
   g.add(screenMesh);
   return g;
 }
+
+export function ceilingLamp(accentColor = '#2563EB', w = 3.6) {
+  const g = new THREE.Group();
+
+  // 1. Ceiling mount canopies
+  g.add(box(0.35, 0.05, 0.35, '#334155', -w / 2 + 0.5, 0.85, 0));
+  g.add(box(0.35, 0.05, 0.35, '#334155', w / 2 - 0.5, 0.85, 0));
+
+  // 2. Black suspension cables
+  const cableMat = mat('#64748b');
+  const cableGeom = new THREE.CylinderGeometry(0.02, 0.02, 0.85);
+  const c1 = new THREE.Mesh(cableGeom, cableMat);
+  c1.position.set(-w / 2 + 0.5, 0.42, 0);
+  const c2 = new THREE.Mesh(cableGeom, cableMat);
+  c2.position.set(w / 2 - 0.5, 0.42, 0);
+  g.add(c1, c2);
+
+  // 3. Main floating pendant hood / fixture body (sleek modern architectural bar)
+  g.add(box(w, 0.22, 0.52, '#1e293b', 0, 0, 0));
+  g.add(box(w + 0.06, 0.06, 0.56, accentColor, 0, 0.08, 0)); // Division neon trim
+
+  // 4. Ultra-bright glowing LED diffuser panel underneath (MeshBasicMaterial)
+  const lightMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+  const panel = new THREE.Mesh(new THREE.BoxGeometry(w - 0.2, 0.06, 0.44), lightMat);
+  panel.position.set(0, -0.1, 0);
+  g.add(panel);
+
+  // 5. Stylized soft light cone / beam hitting the floor
+  const coneGeom = new THREE.CylinderGeometry(w / 2 - 0.1, w / 2 + 1.2, 2.3, 16, 1, true);
+  const coneMat = new THREE.MeshBasicMaterial({
+    color: '#ffffff',
+    transparent: true,
+    opacity: 0.07,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const cone = new THREE.Mesh(coneGeom, coneMat);
+  cone.position.set(0, -1.2, 0);
+  g.add(cone);
+
+  // 6. Warm pool of light on the floor underneath the lamp
+  const poolMat = new THREE.MeshBasicMaterial({
+    color: '#ffffff',
+    transparent: true,
+    opacity: 0.10,
+    depthWrite: false,
+  });
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(w + 1.8, 3.8), poolMat);
+  pool.rotation.x = -Math.PI / 2;
+  pool.position.set(0, -2.44, 0);
+  g.add(pool);
+
+  return g;
+}
