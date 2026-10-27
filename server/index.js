@@ -9,6 +9,7 @@ import { buildSystemPrompt } from './prompts.js';
 import { isLocal, streamLocal, localBase } from './local.js';
 import { delegate, wantsDelegation } from './delegate.js';
 import { wantsHermesExecution, cleanHermesPrompt, executeHermesFleet } from './hermes.js';
+import { getFleetStatus } from './fleet.js';
 
 // ---------- Konfigurasi (lihat .env.example) ----------
 const PORT = Number(process.env.PORT || 3001);
@@ -109,6 +110,15 @@ function friendlyError(err) {
 // ---------- API ----------
 app.get('/api/config', (req, res) => {
   res.json({ demo: DEMO, needsCode: Boolean(ACCESS_CODE) });
+});
+
+app.get('/api/fleet', async (req, res) => {
+  try {
+    const status = await getFleetStatus();
+    res.json(status);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/api/verify', requireAccess, (req, res) => res.json({ ok: true }));

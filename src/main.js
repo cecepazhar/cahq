@@ -24,9 +24,9 @@ const doneTimers = new Map();
 // ---------- chips divisi ----------
 const chipsEl = $('chips');
 const chipDefs = [
-  { id: 'overview', label: 'Seluruh kantor', color: '#1d2433' },
+  { id: 'overview', label: 'Seluruh kantor', color: '#272732' },
   ...DIVISIONS.map((d) => ({ id: d.id, label: d.name, color: d.color })),
-  { id: 'pantry', label: 'Pantry', color: '#e08e5a' },
+  { id: 'noc', label: '⚡ Fleet NOC', color: '#2563EB' },
 ];
 for (const c of chipDefs) {
   const b = document.createElement('button');
@@ -51,12 +51,12 @@ function goTo(id) {
   if (id === 'overview') {
     stage.focus('overview');
     view = { kind: 'overview', id: null };
-  } else if (id === 'pantry') {
+  } else if (id === 'pantry' || id === 'noc') {
     stage.focus('room', PITCH_X, PITCH_Z);
-    view = { kind: 'pantry', id };
+    view = { kind: 'noc', id: 'noc' };
   } else {
     const r = rooms.get(id);
-    stage.focus('room', r.center.x, r.center.z);
+    if (r) stage.focus('room', r.center.x, r.center.z);
     view = { kind: 'room', id };
   }
   markChip(id);

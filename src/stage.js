@@ -21,8 +21,9 @@ export function createStage(canvas) {
   const camera = new THREE.OrthographicCamera(-10, 10, 10, -10, -50, 400);
 
   // ---------- cahaya ----------
-  scene.add(new THREE.HemisphereLight('#ffffff', '#b8c4d8', 1.55));
-  const sun = new THREE.DirectionalLight('#fff6e8', 2.1);
+  scene.add(new THREE.HemisphereLight('#3b82f6', '#0a0a0c', 1.25));
+  scene.add(new THREE.AmbientLight('#121524', 0.85));
+  const sun = new THREE.DirectionalLight('#c7d2fe', 1.85);
   sun.position.set(14, 46, 30);
   sun.castShadow = true;
   sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
@@ -39,7 +40,7 @@ export function createStage(canvas) {
   // cincin penanda karyawan terpilih
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(0.62, 0.82, 40),
-    new THREE.MeshBasicMaterial({ color: '#4f7cff', transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }),
+    new THREE.MeshBasicMaterial({ color: '#2563EB', transparent: true, opacity: 0.95, side: THREE.DoubleSide, depthWrite: false }),
   );
   ring.rotation.x = -Math.PI / 2;
   ring.visible = false;
